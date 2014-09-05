@@ -7,13 +7,8 @@ response = {}
 
 class AlertHandler(MethodDispatcher):
 
-    def index(self):
-        self.write("NOOB Web and Websocket server");
-        self.finish();
-
     @tornado.web.asynchronous
-    def siteDown(self, time=1000):
-
+    def siteDown(self, time=1000, *args, **kwargs):
         response["status"] = 'sent'
         response["sent_to"] = {}
 
@@ -26,7 +21,7 @@ class AlertHandler(MethodDispatcher):
 
 
     @tornado.web.asynchronous
-    def message(self, text, color="red"):
+    def message(self, text, color="red", *args, **kwargs):
         response["status"] = 'sent'
         response["sent_to"] = {}
 

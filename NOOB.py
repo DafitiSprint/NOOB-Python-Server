@@ -9,9 +9,8 @@ from tornado.options import define, options, parse_command_line
 define("port", default=80, help="run on the given port", type=int)
 
 app = tornado.web.Application([
-    (r'/', AlertHandler),
+    (r'/', WebSocketHandler),
     (r'/alert/.*', AlertHandler),
-    (r'/ws', WebSocketHandler),
 ])
 
 if __name__ == '__main__':
