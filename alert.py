@@ -1,5 +1,5 @@
 import tornado.web
-from tornado.escape import json_encode
+from tornado.escape import json_encode, json_decode
 from dispatcher import MethodDispatcher
 from websocket import WebSocketHandler
 
@@ -18,6 +18,24 @@ class AlertHandler(MethodDispatcher):
 
         self.write(json_encode(response))
         self.finish()
+
+    @tornado.web.asynchronous
+    def newrelic(self, alert="", deployment=""):
+        response["status"] = 'sent'
+	response["sent_to"] = {}
+	
+	
+	self._siren(2000)
+	if deployment != "":
+		self._userBrowser('deployment done, pay attention','yellow')
+
+	if alert != "":
+		alert = json_decode(alert)
+		self._userBrowser(alert['message'],'red')
+
+	print alert
+
+        self.finish()	
 
 
     @tornado.web.asynchronous
