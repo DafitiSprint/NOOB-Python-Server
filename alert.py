@@ -7,6 +7,10 @@ response = {}
 
 class AlertHandler(MethodDispatcher):
 
+    def index(self):
+        self.write("NOOB Web and Websocket server");
+        self.finish();
+
     @tornado.web.asynchronous
     def siteDown(self, time=1000):
 
