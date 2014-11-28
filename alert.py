@@ -8,11 +8,11 @@ response = {}
 class AlertHandler(MethodDispatcher):
 
     @tornado.web.asynchronous
-    def siteDown(self, time=1000, *args, **kwargs):
+    def siteDown(self, *args, **kwargs):
         response["status"] = 'sent'
-        response["sent_to"] = {}
+        response["sent_to"] = {'siren', 'userBrowser'}
 
-        self._siren(time)
+        self._siren('500','6')
         self._userBrowser("Site is down!", "yellow")
 
 
@@ -22,18 +22,18 @@ class AlertHandler(MethodDispatcher):
     @tornado.web.asynchronous
     def newrelic(self, alert="", deployment=""):
         response["status"] = 'sent'
-	response["sent_to"] = {}
-	
-	
-	self._siren(2000)
-	if deployment != "":
-		self._userBrowser('deployment done, pay attention','yellow')
+    	response["sent_to"] = {}
+    	
+    	
+    	self._siren()
+    	if deployment != "":
+    		self._userBrowser('deployment done, pay attention','yellow')
 
-	if alert != "":
-		alert = json_decode(alert)
-		self._userBrowser(alert['message'],'red')
+    	if alert != "":
+    		alert = json_decode(alert)
+    		self._userBrowser(alert['message'],'red')
 
-	print alert
+    	print alert
 
         self.finish()	
 
@@ -48,11 +48,22 @@ class AlertHandler(MethodDispatcher):
         self.write(json_encode(response))
         self.finish()
 
+    @tornado.web.asynchronous
+    def beep(self, time='1000', repeat='1', *args, **kwargs):
+        response["status"] = 'sent'
+        response["sent_to"] = {}
+
+        self._siren(time, repeat)
+
+        self.write(json_encode(response))
+        self.finish()
 
 
-    def _siren(self, time):
-        WebSocketHandler.broadcast(self.get_argument("time", time), 'siren')
-        response["sent_to"]["siren"] = time
+
+
+    def _siren(self, time='1000', repeat='1'):
+        WebSocketHandler.broadcast(time+'-'+repeat, 'siren')
+        response["sent_to"]["siren"] = time+'-'+repeat
 
 
     def _userBrowser(self, text, color="red"):

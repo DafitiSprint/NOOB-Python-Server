@@ -1,4 +1,5 @@
 import tornado.websocket
+from tornado.log import gen_log, app_log
 
 clients = {}
 
