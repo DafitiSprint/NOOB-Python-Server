@@ -22,20 +22,19 @@ class AlertHandler(MethodDispatcher):
     @tornado.web.asynchronous
     def newrelic(self, alert="", deployment=""):
         response["status"] = 'sent'
-    	response["sent_to"] = {}
-    	
-    	
-    	self._siren()
-    	if deployment != "":
-    		self._userBrowser('deployment done, pay attention','yellow')
+        response["sent_to"] = {}
 
-    	if alert != "":
-    		alert = json_decode(alert)
-    		self._userBrowser(alert['message'],'red')
+        if deployment != "":
+            self._userBrowser('deployment done, pay attention','yellow')
+
+        if alert != "":
+            alert = json_decode(alert)
+            self._siren('200','2')
+            self._userBrowser(alert['message'],'red')
 
     	print alert
 
-        self.finish()	
+        self.finish()
 
 
     @tornado.web.asynchronous
